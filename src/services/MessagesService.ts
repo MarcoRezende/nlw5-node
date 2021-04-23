@@ -1,8 +1,8 @@
-import { Request, Response } from "express";
-import { getCustomRepository, Repository } from "typeorm";
+import { Request, Response } from 'express';
+import { getCustomRepository, Repository } from 'typeorm';
 
-import { MessagesRepository } from "../repositories/MessagesRepository";
-import { Message } from "../entities/Message";
+import { MessagesRepository } from '../repositories/MessagesRepository';
+import { Message } from '../entities/Message';
 
 interface MessageData {
 	admin_id?: string;
@@ -32,7 +32,7 @@ class MessagesService {
 	async listByUser(user_id: string): Promise<Message[]> {
 		const list = await this.messagesRepository.find({
 			where: { user_id },
-			relations: ["user"],
+			relations: ['user'],
 		});
 
 		return list;
