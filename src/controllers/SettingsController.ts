@@ -39,12 +39,12 @@ class SettingsController {
 		const { chat } = req.body;
 
 		const settingsService = new SettingsService();
-
 		try {
 			const setting = await settingsService.update({
 				username,
 				chat,
 			});
+			return res.json(setting);
 		} catch (err) {
 			return res.status(400).json({ message: err.message });
 		}
