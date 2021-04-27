@@ -37,17 +37,18 @@ class ConnectionsService {
 	}
 
 	async findAllWithoutAdmin(): Promise<Connection[]> {
-		const connection = await this.connectionsRepository.find({
+		const connections = await this.connectionsRepository.find({
 			where: { admin_id: null },
 			relations: ['user'],
 		});
 
-		return connection;
+		return connections;
 	}
 
 	async findBySocketID(socket_id: string): Promise<Connection> {
 		const connection = await this.connectionsRepository.findOne({
-			socket_id,
+			where: { socket_id },
+			relations: ['user'],
 		});
 
 		return connection;

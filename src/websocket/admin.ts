@@ -10,6 +10,8 @@ io.on('connect', async socket => {
 
   const allConnectionsWithoutAdmin = await connectionsService.findAllWithoutAdmin();
 
+  console.log(allConnectionsWithoutAdmin);
+
   io.emit('admin_list_all_users', allConnectionsWithoutAdmin);
 
   socket.on('admin_list_messages_by_user', async (params, callback) => {
@@ -26,7 +28,7 @@ io.on('connect', async socket => {
     await messagesService.create({
       text,
       user_id,
-      admin_id: socket.id + 'random-user-id',
+      admin_id: socket.id,
     });
 
     const { socket_id } = await connectionsService.findByUserId(user_id);
@@ -41,7 +43,7 @@ io.on('connect', async socket => {
     const { user_id } = params;
     const connection = await connectionsService.updateAdminID(
       user_id,
-      socket.id + 'random-user-id',
+      socket.id,
     );
 
     const allConnectionsWithoutAdmin = await connectionsService.findAllWithoutAdmin();

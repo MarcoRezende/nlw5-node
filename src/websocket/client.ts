@@ -55,23 +55,27 @@ io.on('connect', socket => {
 		socket.emit('client_list_all_messages', allMessages);
 
 		const allUsers = await connectionsService.findAllWithoutAdmin();
-		io.emit('client_list_all_messages', allUsers);
+		io.emit('admin_list_all_users', allUsers);
 	});
 
-	socket.on(
-		'client_send_to_admin',
-		async (params: { text: string; socket_admin_id: string }) => {
-			const { text, socket_admin_id } = params;
-			const socket_id = socket.id;
+	socket.on('client_send_to_admin', async params => {
+		const { text, socket_admin_id } = params;
+		const socket_id = socket.id;
 
-			const { user_id } = await connectionsService.findBySocketID(socket.id);
+		console.log(text, socket_admin_id);
 
-			const message = messagesService.create({ text, user_id });
+		const {
+			user_id,
+			user: { email },
+		} = await connectionsService.findBySocketID(socket_id);
 
-			io.to(socket_admin_id).emit('admin_receive_message', {
-				message,
-				socket_id,
-			});
-		},
-	);
+		console.log('ATXOUU', user_id);
+
+		const message = await messagesService.create({ text, user_id });
+
+		io.to(socket_admin_id).emit('admin_receive_message', {
+			message,
+			email,
+		});
+	});
 });
