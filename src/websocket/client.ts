@@ -62,14 +62,10 @@ io.on('connect', socket => {
 		const { text, socket_admin_id } = params;
 		const socket_id = socket.id;
 
-		console.log(text, socket_admin_id);
-
 		const {
 			user_id,
 			user: { email },
 		} = await connectionsService.findBySocketID(socket_id);
-
-		console.log('ATXOUU', user_id);
 
 		const message = await messagesService.create({ text, user_id });
 
